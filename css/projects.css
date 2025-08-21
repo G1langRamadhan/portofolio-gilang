@@ -1,0 +1,116 @@
+/* ===== Projects modal (theme-aware via CSS vars) ===== */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 70; /* di atas header (z-50) */
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.modal.is-open { display: flex; }
+
+.modal__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  animation: fadeIn .5s ease;
+}
+
+.modal__panel {
+  position: relative;
+  width: min(840px, calc(100% - 2rem));
+  max-height: calc(100vh - 4rem);
+  overflow: auto;
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  box-shadow: 0 10px 40px rgba(0,0,0,.25);
+  animation: slideUp .5s ease;
+}
+
+.modal__header {
+  position: sticky;
+  top: 0;
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  z-index: 1;
+}
+
+.modal__body { padding: 1rem 1.25rem; }
+.modal__footer {
+  border-top: 1px solid var(--border);
+  padding: .75rem 1.25rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: .5rem;
+  background: var(--card);
+}
+
+.modal__close {
+  display: inline-flex;
+  width: 2rem;
+  height: 2rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  background: transparent;
+  cursor: pointer;
+  color: inherit;
+}
+
+/* === Click affordance untuk project card === */
+.project-card {
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.project-card:hover,
+.project-card:focus-within {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(0,0,0,.15);
+}
+
+/* tombol full-card */
+.card-btn { display:block; width:100%; text-align:left; cursor:pointer; border:none; background:transparent; }
+
+/* media + overlay hint */
+.card-media { position:relative; }
+.card__overlay {
+  position:absolute; inset:0;
+  display:grid; place-items:center;
+  background: linear-gradient(to bottom, rgba(0,0,0,.0), rgba(0,0,0,.35));
+  opacity:0; transition: opacity .18s ease;
+}
+.project-card:hover .card__overlay,
+.project-card:focus-within .card__overlay { opacity:1; }
+
+.chip {
+  display:inline-flex; align-items:center; gap:.4rem;
+  padding:.35rem .6rem; border-radius:9999px;
+  border:1px solid var(--border); background:var(--card); color:var(--text);
+  font-size:.75rem; font-weight:600;
+}
+.chip svg { width:14px; height:14px; }
+
+/* fokus keyboard yang jelas */
+.card-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* di perangkat sentuh (tanpa hover), tunjukkan chip secara permanen */
+@media (hover: none) {
+  .card__overlay { opacity:1; background: linear-gradient(to bottom, rgba(0,0,0,.0), rgba(0,0,0,.15)); }
+}
+
+
+/* simple animations */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(8px); opacity: 0; }
+                     to   { transform: translateY(0);   opacity: 1; } }
