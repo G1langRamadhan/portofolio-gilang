@@ -221,7 +221,7 @@ function renderExperiences(containerId = '#experience-list', initialCount = 3) {
   const container = document.querySelector(containerId);
   if (!container) return;
 
-  container.innerHTML = experienceData.map((exp, idx) => {
+  const experiencesHtml = experienceData.map((exp, idx) => {
     const hideMobile = idx >= initialCount ? 'hidden md:block' : '';
     const period = formatPeriod(exp);
     const meta = joinMeta([exp.workMode, exp.location]);
@@ -248,7 +248,7 @@ function renderExperiences(containerId = '#experience-list', initialCount = 3) {
     const title = [exp.role, exp.company].filter(Boolean).join(', ');
 
     return `
-      <article class="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 ${hideMobile}">
+      <article class="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-6 ${hideMobile}" data-experience-item>
         <header class="flex flex-wrap items-baseline justify-between gap-2">
           <h3 class="font-semibold">${title}</h3>
           <div class="flex flex-col items-end gap-0.5 text-right">${headerRight}</div>
@@ -259,6 +259,20 @@ function renderExperiences(containerId = '#experience-list', initialCount = 3) {
       </article>
     `;
   }).join('');
+
+  container.innerHTML = experiencesHtml;
+
+  if (experienceData.length > initialCount) {
+    const button = document.createElement('button');
+    button.textContent = 'Show more';
+    button.classList.add('mt-4', 'w-full', 'rounded-full', 'border', 'border-[var(--border)]', 'py-2', 'text-sm', 'font-medium', 'hover:bg-black/5', 'dark:hover:bg-white/5', 'md:hidden');
+    button.addEventListener('click', () => {
+      const hiddenItems = container.querySelectorAll('[data-experience-item].hidden');
+      hiddenItems.forEach(item => item.classList.remove('hidden'));
+      button.remove();
+    });
+    container.appendChild(button);
+  }
 }
 
 renderExperiences();
